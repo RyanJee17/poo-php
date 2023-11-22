@@ -41,10 +41,10 @@ class Lobby
     }
 }
 
-class Player
+abstract class Player
 {
     protected $name;
-    protected $ratio ;
+    protected $ratio;
     public function __construct($name, $ratio = 400.0)
     {
         $this->name = $name;
@@ -72,16 +72,10 @@ class Player
     }
 }
 
-class QueuingPlayer extends Player
+final class QueuingPlayer extends Player
 {
-    
+
     protected $range = 1;
-    
-    public function __construct($player)
-    {
-        $this->name = $player->getName();
-        $this->ratio = $player->getRatio();
-    }
 
     public function getRange()
     {
@@ -89,12 +83,22 @@ class QueuingPlayer extends Player
     }
 }
 
-$greg = new Player('greg', 400);
-$jade = new Player('jade', 476);
+class BlitzPlayer extends Player
+{
+    public function __construct($name)
+    {
+        parent::__construct($name, 1200);
+    }
+}
+
+$greg = new QueuingPlayer('greg', 400);
+$jade = new QueuingPlayer('jade', 476);
+$ryan = new BlitzPlayer('ryan');
 
 $lobby = new Lobby();
 $lobby->addPlayers($greg, $jade);
 
 var_dump($lobby->findOponents($lobby->queuingPlayers[0]));
+var_dump($ryan)
 
 exit(0);
